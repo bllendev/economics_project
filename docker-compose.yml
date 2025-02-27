@@ -1,0 +1,43 @@
+networks:
+  backend:
+
+services:
+  web:
+    build: .
+    env_file:
+      - ./.env
+    # command: gunicorn economics_project.wsgi -b 0.0.0.0:8000 --timeout 1000 --reload
+    command: python manage.py runserver 0.0.0.0:8000 
+    environment:
+      - DJANGO_SETTINGS_MODULE=economics_project.settings
+      - ENVIRONMENT=${ENVIRONMENT}
+      - SECRET_KEY=${SECRET_KEY}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - OPENAI_API_KEY=${OPENAI_API_KEY_KALIBRE}
+      - DEBUG=${DEBUG}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_KALIBRE}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_KALIBRE}
+      - AWS_REGION=${AWS_REGION_KALIBRE}
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+

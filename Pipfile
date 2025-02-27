@@ -1,0 +1,36 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-crispy-forms = "*"
+aws = "*"
+crispy-bootstrap5 = "*"
+django = "*"
+django-allauth = "*"
+whitenoise = "*"
+gunicorn = "*"
+dj-database-url = "*"
+django-bootstrap4 = "*"
+flake8 = "*"
+factory-boy = "*"
+coverage = "*"
+pytest = "*"
+pytest-django = "*"
+openai = "*"
+crispy-bootstrap4 = "*"
+matplotlib = "*"
+plotly = "*"
+pandas = "*"
+scipy = "*"
+scikit-learn = "*"
+python-decouple = "*"
+psycopg2-binary = "*"
+rapidfuzz = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

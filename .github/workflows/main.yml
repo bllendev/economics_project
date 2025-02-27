@@ -1,0 +1,63 @@
+name: django - ci/cd
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: kalibre-bllendev
+    env:
+      DJANGO_SETTINGS_MODULE: bookstore_project.settings
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+      CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+      CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+      CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      DEBUG: 1
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      KALIBRE_PRIVADO: ${{ secrets.KALIBRE_PRIVADO }}
+      KALIBRE_EBOOK_CONVERT_URL: ${{ secrets.KALIBRE_EBOOK_CONVERT_URL }}
+
+    services:
+      db:
+        image: ankane/pgvector
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.11.5
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11.5
+  
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libpq-dev gcc
+  
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
+        python -m pip install psycopg2-binary
+        python -m pip install psycopg2
+        python manage.py collectstatic --noinput
+  
+    - name: Run tests
+      run: coverage run manage.py test
