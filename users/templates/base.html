@@ -17,7 +17,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <!-- JS Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org@2.0.3"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="{% static 'js/base.js' %}"></script>
@@ -75,25 +74,25 @@
         <ul>
           <li><strong><a 
             hx-get="{% url 'users:home' %}" 
-            hx-target="#body" 
+            hx-target="body" 
             hx-swap="innerHTML transition:true"
             hx-push-url="true">Economics Dashboard</a></strong></li>
           {% if user.is_authenticated %}
             <li><a 
               hx-get="{% url 'account_logout' %}" 
-              hx-target="body" 
-              hx-swap="outerHTML transition:true"
+              hx-target="#body" 
+              hx-swap="innerHTML transition:true"
               hx-push-url="true">log out</a></li>
           {% else %}
             <li><a 
               hx-get="{% url 'account_login' %}" 
-              hx-target="body" 
-              hx-swap="outerHTML transition:true"
+              hx-target="#body" 
+              hx-swap="innerHTML transition:true"
               hx-push-url="true">log in</a></li>
             <li><a 
               hx-get="{% url 'account_signup' %}" 
-              hx-target="body" 
-              hx-swap="outerHTML transition:true"
+              hx-target="#body" 
+              hx-swap="innerHTML transition:true"
               hx-push-url="true">sign up</a></li>
           {% endif %}
           <li><a 

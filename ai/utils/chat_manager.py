@@ -2,6 +2,7 @@
 # from documents.vector.milvus_lite import MilvusWrapper
 from ai.openai import OpenAIWrapper
 from ai.huggingface import parse_user_intent
+from ai.models import Chat
 
 import logging
 
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ChatManager:
 
-    def __init__(self, chat):
+    def __init__(self, chat: Chat):
         self.chat = chat
         self.llm = OpenAIWrapper()
 
@@ -19,4 +20,3 @@ class ChatManager:
         messages = self.chat.get_messages()
         response = self.llm.generate_response(message.text, messages=messages)
         return response
-
