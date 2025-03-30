@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from users.tests.factories import (
-    CustomUserFactory,
+    UserFactory,
 )
 
 
@@ -11,7 +11,7 @@ class SignupPageTests(TestCase):
     TEST_USERNAME = "testuser"
 
     def setUp(self):
-        self.test_user = CustomUserFactory.create(username=self.TEST_USERNAME)
+        self.test_user = UserFactory.create(username=self.TEST_USERNAME)
         url = reverse("account_signup")
         self.response = self.client.get(url)
 

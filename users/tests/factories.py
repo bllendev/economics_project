@@ -3,8 +3,7 @@ import random
 from django.contrib.auth import get_user_model
 
 
-
-class CustomUserFactory(factory.django.DjangoModelFactory):
+class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()
 

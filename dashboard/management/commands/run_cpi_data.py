@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from users.models import UserSettings
+from django.config import settings
 
+import os
 import boto3
-from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 
 import logging
 
@@ -31,6 +31,9 @@ def upload_file_to_bucket(file_name, bucket_name, object_name=None):
         raise e
 
     return
+
+
+FILE_PATH = os.path.join(settings.BASE_DIR, "data", "cpi.xlsx")
 
 
 class Command(BaseCommand):

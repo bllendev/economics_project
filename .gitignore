@@ -1,9 +1,7 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/python,pycharm+all,django
 *.epub
 *.mobi
 *.pdf
-
 # react stuff
 node_modules/
 
@@ -219,3 +217,4 @@ fabric.properties
 *.html~
 .tasks
 /data
+/econ_env/

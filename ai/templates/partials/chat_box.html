@@ -1,0 +1,156 @@
+<!--partials/chatbox.html-->
+<style>
+    /* Chatbox Styling */
+    .chatbox {
+        position: fixed;
+        bottom: 5vh;
+        right: 5vw;
+        width: 30vw;
+        max-width: 350px;
+        height: 60vh;
+        background-color: #fff;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+    
+    .hidden {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    
+    .chatbox-header {
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chatbox-header button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    
+    .chatbox-header button:hover {
+        transform: rotate(90deg);
+    }
+    
+    .chatbox-body {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: #f1f1f1;
+        font-size: 14px;
+        color: #333;
+    }
+    
+    .chatbox-message {
+        margin-bottom: 10px;
+        padding: 8px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        width: fit-content;
+        max-width: 80%;
+        clear: both;
+    }
+    
+    .chatbox-message.user-message {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+    }
+    
+    .chatbox-message.ai-message {
+        background-color: #f9f9f9;
+        color: #333;
+    }
+    
+    .chatbox-footer {
+        padding: 15px;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    #chat-input {
+        width: 80%;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        outline: none;
+    }
+    
+    #send-chat {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    #send-chat:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Glowing Toggle Button */
+    .toggle-button {
+        position: fixed;
+        bottom: 5vh;
+        right: 5vw;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #007bff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 123, 255, 0.5);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 1001;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    
+    .toggle-button:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 123, 255, 0.8);
+        transform: scale(1.1);
+    }
+</style>
+    
+<div id="chatbox" class="chatbox hidden">
+    <div class="chatbox-body">
+        <!-- Chat content will go here -->
+    </div>
+</div>
+
+<button id="toggle-chatbox" class="toggle-button">
+    <i class="fas fa-comments"
+        id="chat-messages"
+        hx-target="#chatbox"
+        hx-swap="innerHTML swap:250ms"
+        hx-trigger="click"
+        hx-get="{% url 'chats' %}"
+        onclick="toggleChatbox()"
+    ></i> <!--// wait a sec so user doesn't see html change upon close-->
+</button>

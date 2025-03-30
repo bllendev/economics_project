@@ -1,0 +1,40 @@
+<!--partials/chat_messages.html-->
+<div id="chatbox-body" class="chatbox-body">
+    <div id="message-list">
+        {% for message in chat.messages.all %}
+            {% if message.messenger == "USER" %}
+                {% include 'partials/chat_message_user.html' with message=message %}
+            {% else %}
+                {% include 'partials/chat_message_ai.html' with message=message %}
+            {% endif %}
+
+        {% endfor %}
+
+        <!--LISTENER TO INJECT AI RESPONSE - triggered upon save of user message-->
+        <i id="loading-indicator-ai-message" class="fas fa-spinner fa-spin loading-indicator"></i>
+        <div id="ai-message"
+            hx-trigger="refresh-forms-chat-message-ai from:body"
+            hx-post="{% url 'message-create' %}"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            hx-vals='{"chat_pk": "{{ chat.pk }}", "messenger": "AI"}'
+            hx-swap="beforeend"
+            hx-indicator="#loading-indicator-ai-message"
+            hx-target="#message-list"
+        >
+        </div>
+    </div>
+</div>
+
+<div class="chatbox-footer">
+    <input type="text" id="chat-input" name="text" placeholder="Ask something..." autocomplete="off"
+        hx-post="{% url 'message-create' %}"
+        hx-include="#chat-input"
+        hx-vals='{"chat_pk": "{{ chat.pk }}", "messenger": "USER"}'
+        hx-target="#message-list"
+        hx-swap="beforeend"
+        hx-on::after-request="resetInput()"
+        hx-trigger="keyup[key=='Enter']"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+    >
+</div>
+

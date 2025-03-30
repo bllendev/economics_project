@@ -1,0 +1,47 @@
+<!--partials/chats.html-->
+<div class="chatbox-header">
+    <span>AI Assistant</span>
+    <button id="close-chatbox"
+        hx-target="#chatbox"
+        hx-swap="innerHTML swap:250ms"
+        hx-trigger="click"
+        hx-get="{% url 'chats' %}"
+        onclick="toggleChatbox()"
+    >×</button>
+</div>
+
+<div id="chatbox-body" class="chatbox-body">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Chat Name</th>
+                <th>Last Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for chat in chats %}
+                {% if chat %}
+                    <tr hx-get="{% url 'chat-messages' chat.pk %}" 
+                        hx-target="#chatbox"
+                        hx-swap="innerHTML"
+                        hx-trigger="click">
+                        <td>{{ chat.name }}</td>
+                        <td>{{ chat.messages.last.text }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>    
+</div>
+
+<div class="chatbox-footer">
+    <input type="text" id="chat-input" name="text" placeholder="Ask something..." autocomplete="off"
+        hx-post="{% url 'chat-create' %}"
+        hx-include="#chat-input"
+        hx-target="#chatbox"
+        hx-swap="innerHTML"
+        hx-on::after-request="resetInput()"
+        hx-trigger="keyup[key=='Enter']"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+    >
+</div>

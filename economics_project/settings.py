@@ -89,12 +89,12 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Third-Party
     "crispy_forms",
-    "crispy_bootstrap4",
-    # "crispy_bootstrap5",
+    "crispy_bootstrap5",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     # Local
+    "common",
     "users",
     "ai",
     "dashboard",
@@ -118,14 +118,13 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_PASS")
-AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "home"
 
-ACCOUNT_LOGIN_METHODS = {'username'}
+ACCOUNT_LOGIN_METHODS = {"username"}
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_LOGOUT_REDIRECT = "home"
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_SIGNUP_FIELDS = ["email", "username*", "password1*", "password2*"]
 ACCOUNT_UNIQUE_EMAIL = True
 
 MEDIA_URL = "/media/"  # new
@@ -144,6 +143,8 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "django.contrib.admindocs.middleware.XViewMiddleware",
 ]
+if DEBUG:
+    MIDDLEWARE.append("django.middleware.cache.FetchFromCacheMiddleware")
 
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
@@ -212,8 +213,8 @@ DATABASES = {
 #     }
 # }
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES["default"].update(db_from_env)
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# DATABASES["default"].update(db_from_env)
 
 
 # Password validation

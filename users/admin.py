@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import UserCreationForm, UserChangeForm
 
 
-CustomUser = get_user_model()
+User = get_user_model()
 
 
-class CustomUserAdmin(UserAdmin):
+class UserAdmin(UserAdmin):
     pass
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(User, UserAdmin)

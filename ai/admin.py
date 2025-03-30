@@ -1,44 +1,42 @@
 from django.contrib import admin
-from ai.models import (
-    TokenUsage,
-    Conversation,
-    Message,
-)
-
-# extra admin views
-# or admin.StackedInline if you prefer a vertical layout
+from ai.models import AISettings, AI, Chat, Message
 
 
+# AISettings Admin
+@admin.register(AISettings)
+class AISettingsAdmin(admin.ModelAdmin):
+    list_display = ["id", "created_at", "updated_at"]
+    list_filter = ["created_at", "updated_at"]
+
+
+# AI Admin
+@admin.register(AI)
+class AIAdmin(admin.ModelAdmin):
+    list_display = ["id", "settings", "created_at", "updated_at"]
+    search_fields = ["id", "settings__id"]
+    list_filter = ["created_at", "updated_at"]
+    raw_id_fields = ["settings"]
+
+
+# Message Inline for Chat (Displays related messages in the Chat admin)
 class MessageInline(admin.TabularInline):
     model = Message
-    extra = 1  # determines how many empty forms are displayed in the admin
-    # these fields will be displayed but not editable
-    readonly_fields = ("sender", "text", "sent_at")
-    can_delete = False
+    extra = 1  # allows adding one additional message inline
 
 
-# admin models
-@admin.register(TokenUsage)
-class TokenUsageAdmin(admin.ModelAdmin):
-    list_display = ("user", "date", "tokens_used")
-    search_fields = ("user__username",)
-    list_filter = ("date",)
-    ordering = ("-date",)
+# Chat Admin
+@admin.register(Chat)
+class ChatAdmin(admin.ModelAdmin):
+    list_display = ["id", "ai", "created_at", "updated_at", "created_by"]
+    search_fields = ["id", "ai__id"]
+    list_filter = ["created_at", "updated_at"]
+    inlines = [MessageInline]
 
 
-@admin.register(Conversation)
-class ConversationAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "started_at", "last_updated")
-    # assuming `username` is a field on CustomUser
-    search_fields = (
-        "id",
-        "user__username",
-    )
-    list_filter = ("started_at", "last_updated", "user")
-    inlines = [MessageInline]  # this adds the inline form for messages
-
-
+# Message Admin
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ("id", "conversation", "sender", "text", "sent_at")
-    search_fields = ("id", "conversation__id", "text")
+    list_display = ["id", "chat", "messenger", "index", "created_at"]
+    search_fields = ["id", "chat__id", "messenger"]
+    list_filter = ["messenger", "created_at", "updated_at"]
+    raw_id_fields = ["chat"]
